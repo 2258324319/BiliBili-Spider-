@@ -1,0 +1,168 @@
+<% for(var i = 0, len = recommend_medias.length; i < len; i++) {
+        var _data = recommend_medias[i];
+    %>
+<li class="pr no-select loading J_media_list_item">
+    <% if(_data['type'] == 'live'){ %>
+        <img src="<%= GAU(_data['live']['cover_pic'], 'thumb320') %>" width="300" height="300" class="db pa pai" alt="<%='【'+_data['live']['user']['screen_name_origin']+'美拍直播】'+(_data['recommend_caption']?_data['recommend_caption']:'') %>">
+    <% }else{ %>
+        <img src="<%= GAU(_data['cover_pic'], 'thumb320') %>" width="300" height="300" class="db pa pai" alt="<%= _data['caption_complete'] %>">
+    <% } %>
+    <% if(_data['is_popular']) { %>
+        <img src="<%= DEFAULT_CDN_URL %>images/v3/hot.png" width="42" height="42" class="pa par" alt="">
+    <% } %>
+    <% if(_data['category'] == MP_CATEGORY_PHOTO){ %>
+    <div id="w<%= _data['id'] %>" class="js-emo-wrap content-l-emo pr cp" data-id="<%= _data['id'] %>" data-emotags="<%= _data['emotags_json'] %>">
+        <%if(_data['locked']){%>
+            <i class="icon icon-locked-t"></i>
+        <%}%>
+        <div class="js-obj-wrap pa pai"></div>
+        <div class="emo-info layer-black pa"></div>
+        <a hidefocus href="/media/<%= _data['id'] %>" target="_blank" class="emo-info content-l-p pa" title="<%= _data['caption_complete'] %>">
+            <i class="icon icon-item-photo"></i>
+            <%- Emoji.replace(_data['caption']) %>
+        </a>
+    </div>
+    <% if(_data['left_bottom_tip']['icon']){%>
+        <div class="ai-icon js-ai-icon" style="background-image:url('<%= _data['left_bottom_tip']['icon'] %>');position: absolute;left: 8px;top: 280px;width: 100px;height: 16px;background-repeat: no-repeat;background-size: 100px 16px; z-index: 11;opacity: 1;"></div>
+    <%}%>
+    <% } else if(_data['category'] == MP_CATEGORY_LIVE) { %>
+    <div id="wlive<%= _data['id'] %>" class="pr live-list-item">
+        <% if(_data['locked']) { %>
+            <i class="icon icon-locked-t"></i>
+        <% } %>
+        <% if(_data['lives']['is_live']) { %>
+        <a hidefocus href="/live/<%= _data['lives']['id'] %>" class="live-list-item db" target="_blank">
+            <span class="pa ic-i-live" style="left: <%= _data['locked']?'35':'11' %>px;top: 12px;"></span>
+        <% } else { %>
+        <a hidefocus href="/media/<%= _data['id'] %>" class="live-list-item db" target="_blank">
+            <span class="pa ic-i-replay" style="left: <%= _data['locked']?'35':'11' %>px;top: 12px;"></span>
+        <% } %>
+            <div class="layer-black pa"></div>
+            <i class="pa ic-i-play"></i>
+            <div class="pa content-l-p ellipsis">
+                <%- Emoji.replace(_data['live']['caption']) %>
+            </div>
+        </a>
+    </div>
+    <% } else if(_data['type'] == 'live'){ %>
+        <div id="wlive<%= _data['live']['id'] %>" class="pr live-list-item">
+        <% if(_data['locked']) { %>
+            <i class="icon icon-locked-t"></i>
+        <% } %>
+        <a hidefocus href="/live/<%= _data['live']['id'] %>" class="live-list-item db" target="_blank">
+            <span class="pa ic-i-live" style="left: <%= _data['locked']?'35':'11' %>px;top: 12px;"></span>
+            <div class="layer-black pa"></div>
+            <i class="pa ic-i-play"></i>
+            <div class="pa content-l-p ellipsis">
+                <%- Emoji.replace(_data['live']['caption']) %>
+            </div>
+        </a>
+    </div>
+    <% }else{ %>
+    <div id="w<%= _data['id'] %>" class="content-l-video pr cp" data-id="<%= _data['id'] %>" data-video="<%= _data['video'] %>">
+        <%if(_data['locked']){%>
+            <i class="icon icon-locked-t"></i>
+        <%}%>
+        <div class="layer-black pa"></div>
+        <a hidefocus href="/media/<%= _data['id'] %>" class="content-l-p pa" title="<%= _data['caption_complete'] %>">
+            <i class="icon icon-item-play"></i>
+            <%- Emoji.replace(_data['caption']) %>
+        </a>
+    </div>
+    <% } %>
+
+    <div class="pr">
+        <% if(_data['type'] == 'live') { %>
+            <a hidefocus href="/user/<%= _data['live']['user']['id'] %>" class="dbl h48">
+                <img src="<%= GAU(_data['live']['user']['avatar'], 'thumb60')%>" width="28" height="28" class="avatar m10" title="<%= _data['live']['user']['screen_name_origin'] %>" alt="<%= _data['live']['user']['screen_name_origin'] %>">
+                <% if(_data['live']['user']['verified']) { %>
+                <img src="<%= DEFAULT_CDN_URL %>images/vip.png?v1" width="10" height="10" class="pa c-vip" alt="">
+                <% } %>
+            </a>
+            <p class="content-name live-content-name pa"><a hidefocus href="/user/<%= _data['live']['user']['id'] %>" class="content-name-a" title="<%= _data['live']['user']['screen_name_origin'] %>"><%- Emoji.replace(_data['live']['user']['screen_name']) %></a></p>
+        <% }else{ %>
+            <a hidefocus href="/user/<%= _data['user']['id'] %>" class="dbl h48">
+                <img src="<%= GAU(_data['user']['avatar'], 'thumb60')%>" width="28" height="28" class="avatar m10" title="<%= _data['user']['screen_name_origin'] %>" alt="<%= _data['user']['screen_name_origin'] %>">
+                <% if(_data['user']['verified']) { %>
+                <img src="<%= DEFAULT_CDN_URL %>images/vip.png?v1" width="10" height="10" class="pa c-vip" alt="">
+                <% } %>
+            </a>
+            <p class="content-name <%= _data['category'] == MP_CATEGORY_LIVE ? "live-content-name" : "" %> pa"><a hidefocus href="/user/<%= _data['user']['id'] %>" class="content-name-a" title="<%= _data['user']['screen_name_origin'] %>"><%- Emoji.replace(_data['user']['screen_name']) %></a></p>
+        <% } %>
+        <% if(_data['category'] == MP_CATEGORY_LIVE) { %>
+            <% if(_data['lives']['is_live']) { %>
+            <a hidefocus href="/live/<%= _data['lives']['id'] %>" class="db pa content-people" target="_blank">
+            <% } else { %>
+            <a hidefocus href="/media/<%= _data['id'] %>" class="db pa content-people" target="_blank">
+            <% } %>
+                <i class="ic ic-i-people"></i> <%- _data['lives']['plays_count'] %>
+            </a>
+        <% } else if(_data['type'] == 'live'){ %>
+            <a hidefocus href="/live/<%= _data['live']['id'] %>" class="db pa content-people" target="_blank">
+                <i class="ic ic-i-people"></i> <%- _data['live']['plays_count'] %>
+            </a>
+        <% } else { %>
+        <div class="content-like pa" data-id="<%= _data['id'] %>">
+            <% if(_data['liked']) { %>
+                <i class="icon icon-liked"></i>
+            <% }else { %>
+                <i class="icon icon-like"></i>
+            <% } %>
+            <span><%- _data['likes_count'] %></span>
+        </div>
+        <% } %>
+
+        <% if(_data['category'] == MP_CATEGORY_LIVE) { %>
+            <% if(_data['lives']['is_live']) { %>
+            <a hidefocus href="/live/<%= _data['lives']['id'] %>" class="conten-command live-conten-command pa" target="_blank">
+            <% } else { %>
+            <a hidefocus href="/media/<%= _data['id'] %>"class="conten-command live-conten-command pa" target="_blank">
+            <% } %>
+                 <i class="ic ic-i-like"></i> <%- _data['lives']['likes_count'] %>
+            </a>
+        <% } else if(_data['type'] == 'live'){ %>
+            <a hidefocus href="/live/<%= _data['live']['id'] %>" class="conten-command live-conten-command pa" target="_blank">
+                 <i class="ic ic-i-like"></i> <%- _data['live']['likes_count'] %>
+            </a>
+        <% }else { %>
+        <span data-href="/media/<%= _data['id'] %>" data-sc="<%= tid %>" class="conten-command pa js-span-a" 
+            data-open-new-window="1"
+            data-id="<%= _data['id'] %>">
+            <i class="icon icon-command"></i>
+            <span><%- _data['comments_count'] %></span>
+        </span>
+        <% } %>
+    </div>
+</li>
+<% if(is_show_topic_btn) { %>
+    <li class="topic-master-operate" data-id="<%= _data['type'] == 'live' ? _data['live']['id'] : _data['id'] %>">
+        <% if(is_topic_hot && _data['is_top']){ %>
+        <span class="sticked">已置顶</span>
+        <% } %>
+        <div class="master-operate-btn">
+            <i class="operate-btn-icon icon"></i>
+            <div class="master-operate-option">
+                <i class="arrow-icon icon"></i>
+                <div class="btns-wrap">
+                <% if(is_topic_hot){%>
+                    <% if(_data['is_top']){ %>
+                        <a href="javascript:;" class="btn J_stick_btn cancel" data-type="hot" data-url="/mytopic/remove_top">取消置顶</a>
+                    <% } else { %>
+                        <a href="javascript:;" class="btn J_stick_btn" data-type="hot" data-url="/mytopic/set_top">置顶</a>
+                    <% } %>
+                <% } else { %>
+                    <% if(is_count_less_min == 1){ %>
+                        <% if(_data['is_top']){ %>
+                            <a href="javascript:;" class="btn J_stick_btn cancel" data-type="new" data-url="/mytopic/remove_top">取消置顶</a>
+                        <% } else { %>
+                            <a href="javascript:;" class="btn J_stick_btn" data-type="new" data-url="/mytopic/set_top">置顶</a>
+                        <% } %>
+                    <% } %>
+                <% } %>
+                    <a href="javascript:;" class="btn J_exit_topic">移出话题</a>
+                </div>
+            </div>
+        </div>
+    </li>
+<% } %>
+<% } %>
